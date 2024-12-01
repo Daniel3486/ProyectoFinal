@@ -1,0 +1,121 @@
+[gd_scene load_steps=18 format=3 uid="uid://bku67hoai3ucn"]
+
+[ext_resource type="Script" path="res://Scripts/mundo_2.gd" id="1_n2l1k"]
+[ext_resource type="Script" path="res://Scripts/camera_2d.gd" id="2_nvovt"]
+[ext_resource type="Texture2D" uid="uid://b5pa8wkwdbyr3" path="res://pngs/mundo2.png" id="3_s14qp"]
+[ext_resource type="FontFile" uid="uid://dnyjvcu5lgl72" path="res://Tipografia/Tipografia.ttf" id="4_a6xw5"]
+[ext_resource type="PackedScene" uid="uid://op0jldrx5f75" path="res://Escenas/jabalina.tscn" id="5_dar2q"]
+[ext_resource type="PackedScene" uid="uid://dah2iptbhh1k" path="res://Escenas/cañon.tscn" id="6_dv46t"]
+[ext_resource type="PackedScene" uid="uid://cfhtu2t0d6urr" path="res://Escenas/lanzador.tscn" id="7_yfoa3"]
+[ext_resource type="PackedScene" uid="uid://cagoewp51ywvm" path="res://Escenas/suelo.tscn" id="8_d8t28"]
+[ext_resource type="PackedScene" uid="uid://cax5qrsopfadr" path="res://Escenas/detector.tscn" id="9_fmuxw"]
+[ext_resource type="Script" path="res://Scripts/detector.gd" id="10_k352j"]
+[ext_resource type="PackedScene" uid="uid://dp8uxunsllys7" path="res://Escenas/sueloFalso.tscn" id="11_cqf7o"]
+[ext_resource type="PackedScene" uid="uid://c18ci0do6c7gt" path="res://Escenas/label.tscn" id="12_b7wr1"]
+[ext_resource type="Script" path="res://Scripts/label2.gd" id="13_ov0jw"]
+[ext_resource type="PackedScene" uid="uid://p3yp6jwtyyh5" path="res://Escenas/tiempo.tscn" id="14_ug07j"]
+[ext_resource type="PackedScene" uid="uid://b63e3kq6gxqun" path="res://Escenas/distancia.tscn" id="15_pejbs"]
+[ext_resource type="Texture2D" uid="uid://clog5u17q1gr2" path="res://pngs/jabalinaP.png" id="16_n3gwh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6lqfj"]
+size = Vector2(19.8445, 35.1407)
+
+[node name="mundo2" type="Node2D"]
+script = ExtResource("1_n2l1k")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(40, 693)
+limit_left = 0
+limit_top = -1440
+limit_right = 5120
+limit_bottom = 720
+script = ExtResource("2_nvovt")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_top = -1440.0
+offset_right = 5120.0
+offset_bottom = 720.0
+texture = ExtResource("3_s14qp")
+
+[node name="Nivel" type="Label" parent="."]
+offset_left = 187.0
+offset_top = 454.0
+offset_right = 296.0
+offset_bottom = 494.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4_a6xw5")
+theme_override_font_sizes/font_size = 37
+text = "Nivel 2"
+
+[node name="jabalina" parent="." instance=ExtResource("5_dar2q")]
+position = Vector2(-200, 800)
+rotation = 0.00487852
+
+[node name="cañon" parent="." instance=ExtResource("6_dv46t")]
+position = Vector2(72, 562)
+
+[node name="lanzador" parent="." instance=ExtResource("7_yfoa3")]
+position = Vector2(137, 584)
+
+[node name="suelo" parent="." instance=ExtResource("8_d8t28")]
+position = Vector2(1662, 817)
+
+[node name="detector" parent="." instance=ExtResource("9_fmuxw")]
+position = Vector2(1126, 601)
+monitorable = false
+script = ExtResource("10_k352j")
+
+[node name="sueloFalso" parent="." instance=ExtResource("11_cqf7o")]
+position = Vector2(2053, 678)
+
+[node name="detector2" parent="." instance=ExtResource("9_fmuxw")]
+position = Vector2(-55, 602)
+monitorable = false
+script = ExtResource("10_k352j")
+
+[node name="CanvasLayer" parent="." instance=ExtResource("12_b7wr1")]
+script = ExtResource("13_ov0jw")
+
+[node name="Label" parent="CanvasLayer" index="0"]
+text = "Tiempo: 45"
+
+[node name="Tiros" parent="CanvasLayer" index="2"]
+text = "Tiros: 5"
+
+[node name="Tiempo" parent="." instance=ExtResource("14_ug07j")]
+
+[node name="distancia" parent="." instance=ExtResource("15_pejbs")]
+position = Vector2(1082, 423)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="JabalinaP" type="Sprite2D" parent="StaticBody2D"]
+position = Vector2(1191.86, 212.012)
+rotation = -1.56445
+scale = Vector2(0.483388, 1.23983)
+texture = ExtResource("16_n3gwh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(1188.25, 212.109)
+scale = Vector2(0.478721, -2.15655)
+shape = SubResource("RectangleShape2D_6lqfj")
+
+[connection signal="body_shape_entered" from="jabalina" to="jabalina" method="_on_body_shape_entered"]
+[connection signal="camaraJabalina" from="jabalina" to="Camera2D" method="_on_jabalina_camara_jabalina"]
+[connection signal="camaraLanzador" from="jabalina" to="Camera2D" method="_on_jabalina_camara_lanzador"]
+[connection signal="label" from="jabalina" to="CanvasLayer" method="_on_jabalina_label"]
+[connection signal="posicion" from="jabalina" to="distancia" method="_on_jabalina_posicion"]
+[connection signal="tablero" from="jabalina" to="CanvasLayer" method="_on_jabalina_tablero"]
+[connection signal="cambiarCamara" from="cañon" to="Camera2D" method="_on_cañon_cambiar_camara"]
+[connection signal="lanzar" from="cañon" to="jabalina" method="_on_cañon_lanzar"]
+[connection signal="area_entered" from="detector" to="cañon" method="_on_detector_area_entered"]
+[connection signal="area_entered" from="detector" to="lanzador" method="_on_detector_area_entered"]
+[connection signal="body_entered" from="sueloFalso" to="jabalina" method="_on_suelo_falso_body_entered"]
+[connection signal="area_entered" from="detector2" to="cañon" method="_on_detector_area_entered"]
+[connection signal="area_entered" from="detector2" to="lanzador" method="_on_detector_area_entered"]
+[connection signal="tablero" from="CanvasLayer" to="." method="_on_canvas_layer_tablero"]
+[connection signal="timeout" from="Tiempo" to="CanvasLayer" method="_on_tiempo_timeout"]
+
+[editable path="CanvasLayer"]

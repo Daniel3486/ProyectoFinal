@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://dah2iptbhh1k"]
+
+[ext_resource type="Script" path="res://cañon.gd" id="1_0uokq"]
+[ext_resource type="Texture2D" uid="uid://dhwq63snjf3hm" path="res://pngs/cañon.png" id="1_scoc4"]
+
+[node name="cañon" type="CharacterBody2D"]
+script = ExtResource("1_0uokq")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_scoc4")
+offset = Vector2(80, 20)

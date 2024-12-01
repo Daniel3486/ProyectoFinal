@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://op0jldrx5f75"]
+
+[ext_resource type="Script" path="res://Scripts/jabalina.gd" id="1_56of1"]
+[ext_resource type="Texture2D" uid="uid://clog5u17q1gr2" path="res://pngs/jabalinaP.png" id="1_xe1wd"]
+[ext_resource type="Shader" path="res://Shaders/jabalina.gdshader" id="2_jljrd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yb75u"]
+shader = ExtResource("2_jljrd")
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rtkd0"]
+radius = 3.0
+height = 170.0
+
+[node name="jabalina" type="RigidBody2D"]
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_56of1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_yb75u")
+position = Vector2(0, -0.625)
+scale = Vector2(1, 0.5)
+texture = ExtResource("1_xe1wd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_rtkd0")

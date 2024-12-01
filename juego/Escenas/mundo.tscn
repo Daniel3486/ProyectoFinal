@@ -1,0 +1,98 @@
+[gd_scene load_steps=16 format=3 uid="uid://o6x6t4gdywm6"]
+
+[ext_resource type="Script" path="res://Scripts/camera_2d.gd" id="1_cb3cj"]
+[ext_resource type="Script" path="res://Scripts/mundo.gd" id="1_f3jax"]
+[ext_resource type="Texture2D" uid="uid://bgonl6qjugqfb" path="res://pngs/mundo.png" id="1_wvme5"]
+[ext_resource type="PackedScene" uid="uid://dah2iptbhh1k" path="res://Escenas/cañon.tscn" id="2_0m41f"]
+[ext_resource type="PackedScene" uid="uid://cfhtu2t0d6urr" path="res://Escenas/lanzador.tscn" id="3_mi6kx"]
+[ext_resource type="PackedScene" uid="uid://cagoewp51ywvm" path="res://Escenas/suelo.tscn" id="4_67gwf"]
+[ext_resource type="PackedScene" uid="uid://op0jldrx5f75" path="res://Escenas/jabalina.tscn" id="5_571rg"]
+[ext_resource type="PackedScene" uid="uid://cax5qrsopfadr" path="res://Escenas/detector.tscn" id="8_6afal"]
+[ext_resource type="Script" path="res://Scripts/detector.gd" id="9_0b587"]
+[ext_resource type="PackedScene" uid="uid://dp8uxunsllys7" path="res://Escenas/sueloFalso.tscn" id="10_p7wpp"]
+[ext_resource type="PackedScene" uid="uid://c18ci0do6c7gt" path="res://Escenas/label.tscn" id="11_q2v47"]
+[ext_resource type="Script" path="res://Scripts/label.gd" id="12_i54ai"]
+[ext_resource type="PackedScene" uid="uid://p3yp6jwtyyh5" path="res://Escenas/tiempo.tscn" id="12_pomcr"]
+[ext_resource type="PackedScene" uid="uid://b63e3kq6gxqun" path="res://Escenas/distancia.tscn" id="14_n1xy6"]
+[ext_resource type="FontFile" uid="uid://dnyjvcu5lgl72" path="res://Tipografia/Tipografia.ttf" id="15_5sq2a"]
+
+[node name="mundo" type="Node2D"]
+script = ExtResource("1_f3jax")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(40, 693)
+limit_left = 0
+limit_top = -1440
+limit_right = 5120
+limit_bottom = 720
+script = ExtResource("1_cb3cj")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_top = -1440.0
+offset_right = 5120.0
+offset_bottom = 720.0
+texture = ExtResource("1_wvme5")
+
+[node name="Nivel" type="Label" parent="."]
+offset_left = 187.0
+offset_top = 454.0
+offset_right = 296.0
+offset_bottom = 494.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("15_5sq2a")
+theme_override_font_sizes/font_size = 37
+text = "Nivel 1"
+
+[node name="jabalina" parent="." instance=ExtResource("5_571rg")]
+position = Vector2(-200, 800)
+rotation = 0.00487852
+
+[node name="cañon" parent="." instance=ExtResource("2_0m41f")]
+position = Vector2(72, 562)
+
+[node name="lanzador" parent="." instance=ExtResource("3_mi6kx")]
+position = Vector2(137, 584)
+
+[node name="suelo" parent="." instance=ExtResource("4_67gwf")]
+position = Vector2(1662, 817)
+
+[node name="detector" parent="." instance=ExtResource("8_6afal")]
+position = Vector2(1126, 601)
+monitorable = false
+script = ExtResource("9_0b587")
+
+[node name="sueloFalso" parent="." instance=ExtResource("10_p7wpp")]
+position = Vector2(2053, 678)
+
+[node name="detector2" parent="." instance=ExtResource("8_6afal")]
+position = Vector2(-55, 602)
+monitorable = false
+script = ExtResource("9_0b587")
+
+[node name="CanvasLayer" parent="." instance=ExtResource("11_q2v47")]
+script = ExtResource("12_i54ai")
+
+[node name="Tiempo" parent="." instance=ExtResource("12_pomcr")]
+
+[node name="distancia" parent="." instance=ExtResource("14_n1xy6")]
+position = Vector2(1082, 423)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[connection signal="body_shape_entered" from="jabalina" to="jabalina" method="_on_body_shape_entered"]
+[connection signal="camaraJabalina" from="jabalina" to="Camera2D" method="_on_jabalina_camara_jabalina"]
+[connection signal="camaraLanzador" from="jabalina" to="Camera2D" method="_on_jabalina_camara_lanzador"]
+[connection signal="label" from="jabalina" to="CanvasLayer" method="_on_jabalina_label"]
+[connection signal="posicion" from="jabalina" to="distancia" method="_on_jabalina_posicion"]
+[connection signal="tablero" from="jabalina" to="CanvasLayer" method="_on_jabalina_tablero"]
+[connection signal="cambiarCamara" from="cañon" to="Camera2D" method="_on_cañon_cambiar_camara"]
+[connection signal="lanzar" from="cañon" to="jabalina" method="_on_cañon_lanzar"]
+[connection signal="area_entered" from="detector" to="cañon" method="_on_detector_area_entered"]
+[connection signal="area_entered" from="detector" to="lanzador" method="_on_detector_area_entered"]
+[connection signal="body_entered" from="sueloFalso" to="jabalina" method="_on_suelo_falso_body_entered"]
+[connection signal="area_entered" from="detector2" to="cañon" method="_on_detector_area_entered"]
+[connection signal="area_entered" from="detector2" to="lanzador" method="_on_detector_area_entered"]
+[connection signal="tablero" from="CanvasLayer" to="." method="_on_canvas_layer_tablero"]
+[connection signal="timeout" from="Tiempo" to="CanvasLayer" method="_on_tiempo_timeout"]
